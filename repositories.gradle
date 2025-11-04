@@ -1,0 +1,5 @@
+// Add any additional repositories for your dependencies here.
+
+repositories {
+    maven { url = "https://proxy-maven.covers1624.net/" }
+}
