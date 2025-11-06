@@ -9,17 +9,12 @@ import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -161,14 +156,16 @@ public class CropEngineer extends BaseMachine<CropEngineer> implements IAddUIWid
     @NotNull
     public CheckRecipeResult checkProcessing() {
         List<EntityPlayerMP> pList = GetPlayer();
-        if(!pList.isEmpty() && count>=3){
+        if (!pList.isEmpty() && count >= 3) {
             Random random = new Random();
             int randomIndex = random.nextInt(pList.size());
             EntityPlayer randomPlayer = pList.get(randomIndex);
-            ((EntityPlayerMP) randomPlayer).playerNetServerHandler.kickPlayerFromServer(StatCollector.translateToLocal("受到空间扭曲影响,可能是虚空的诅咒"));
+            ((EntityPlayerMP) randomPlayer).playerNetServerHandler
+                .kickPlayerFromServer(StatCollector.translateToLocal("受到空间扭曲影响,可能是虚空的诅咒"));
         }
         System.out.println("TTS 纹理路径：" + TTS.location.toString());
-        System.out.println("TTS 完整资源路径：assets/" + TTS.location.getResourceDomain() + "/" + TTS.location.getResourcePath());
+        System.out
+            .println("TTS 完整资源路径：assets/" + TTS.location.getResourceDomain() + "/" + TTS.location.getResourcePath());
 
         List<ItemStack> inputStacks = getStoredInputs();
         if (inputStacks.isEmpty()) {
@@ -269,13 +266,9 @@ public class CropEngineer extends BaseMachine<CropEngineer> implements IAddUIWid
                         return IDrawable.EMPTY;
                 }
             })
-            // 为每个状态添加提示 tooltip
-            .addTooltip(0, "仅显示图标")
-            .addTooltip(1, "仅显示文本")
-            .addTooltip(2, "显示完整详情")
             // 设置尺寸
-            .setSize(120, 18)
-            .setPos(10, 10);
+            .setSize(80, 18)
+            .setPos(4, 20);
 
         // 3. 将按钮添加到窗口
         builder.widget(displayModeButton);

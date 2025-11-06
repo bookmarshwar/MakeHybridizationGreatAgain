@@ -9,6 +9,7 @@ public enum ItemList {
 
     IntensifyChemicalDistorter,
     CropEngineer,
+    AutomatedBreedingFacility,
     MegaIsaForge;
 
     private boolean mHasNotBeenSet;

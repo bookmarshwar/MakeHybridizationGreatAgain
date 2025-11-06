@@ -30,12 +30,13 @@ public final class Utils {
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
     public static final BigInteger BIG_INTEGER_100 = BigInteger.valueOf(100);
-    public static List<EntityPlayerMP> GetPlayer(){
+
+    public static List<EntityPlayerMP> GetPlayer() {
         MinecraftServer server = MinecraftServer.getServer();
 
         List<EntityPlayerMP> playerList = server.getConfigurationManager().playerEntityList;
 
-// 3. 遍历玩家列表并进行操作
+        // 3. 遍历玩家列表并进行操作
         if (!playerList.isEmpty()) {
             System.out.println("当前在线玩家: " + playerList.size() + " 人");
             for (EntityPlayer player : playerList) {
