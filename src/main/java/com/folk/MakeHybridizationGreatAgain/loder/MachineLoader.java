@@ -1,9 +1,9 @@
 package com.folk.MakeHybridizationGreatAgain.loder;
 
-import com.folk.MakeHybridizationGreatAgain.machine.CropEngineer;
 import net.minecraft.item.ItemStack;
 
 import com.folk.MakeHybridizationGreatAgain.items.ItemList;
+import com.folk.MakeHybridizationGreatAgain.machine.CropEngineer;
 
 public class MachineLoader {
 
@@ -16,10 +16,9 @@ public class MachineLoader {
     }
 
     public static void loadMachines() {
-        CropEngineer =new CropEngineer(newID(ID), "CropEngineer", "育种站").getStackForm(1);
+        CropEngineer = new CropEngineer(newID(ID), "CropEngineer", "育种站").getStackForm(1);
 
         ItemList.CropEngineer.set(CropEngineer);
-
 
     }
 }

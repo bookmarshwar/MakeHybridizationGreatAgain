@@ -12,14 +12,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.IntFunction;
 
-import com.folk.MakeHybridizationGreatAgain.MakeHybridizationGreatAgain;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.folk.MakeHybridizationGreatAgain.MakeHybridizationGreatAgain;
 
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.metatileentity.MetaTileEntity;
-import scala.actors.migration.pattern;
 
 public final class Utils {
 
@@ -28,6 +30,24 @@ public final class Utils {
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
     public static final BigInteger BIG_INTEGER_100 = BigInteger.valueOf(100);
+    public static List<EntityPlayerMP> GetPlayer(){
+        MinecraftServer server = MinecraftServer.getServer();
+
+        List<EntityPlayerMP> playerList = server.getConfigurationManager().playerEntityList;
+
+// 3. 遍历玩家列表并进行操作
+        if (!playerList.isEmpty()) {
+            System.out.println("当前在线玩家: " + playerList.size() + " 人");
+            for (EntityPlayer player : playerList) {
+                // 获取玩家名称
+                String playerName = player.getCommandSenderName();
+                System.out.println(" - " + playerName);
+            }
+        } else {
+            System.out.println("当前没有玩家在线。");
+        }
+        return playerList;
+    }
     // region about game
 
     /**
@@ -361,22 +381,28 @@ public final class Utils {
     public static double calculatePowerTier(double voltage) {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
+
     public static long calculateOverclock(int overclock) {
-        if (overclock<=0){
+        if (overclock <= 0) {
             return 1;
-        }else {
+        } else {
             return (long) (Math.pow(1.1, overclock - 1));
         }
 
     }
+
     public static boolean setOverclockFromStack(ItemStack is, int overclock) {
-        is.getTagCompound().setInteger("overclock", overclock);
+        is.getTagCompound()
+            .setInteger("overclock", overclock);
         return true;
-        //return is.getTagCompound() == null ? -1 : is.getTagCompound().getInteger("overclock");
+        // return is.getTagCompound() == null ? -1 : is.getTagCompound().getInteger("overclock");
     }
+
     public static int getOverclockFromStack(ItemStack is) {
 
-        return is.getTagCompound() == null ? 0 : is.getTagCompound().getInteger("overclock");
+        return is.getTagCompound() == null ? 0
+            : is.getTagCompound()
+                .getInteger("overclock");
     }
 
 }

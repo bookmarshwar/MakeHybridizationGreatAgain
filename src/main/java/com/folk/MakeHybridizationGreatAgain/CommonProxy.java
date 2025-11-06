@@ -1,9 +1,8 @@
 package com.folk.MakeHybridizationGreatAgain;
 
-
-
-import com.folk.MakeHybridizationGreatAgain.items.creativetap.TapLoader;
 import com.folk.MakeHybridizationGreatAgain.items.ItemsLoader;
+import com.folk.MakeHybridizationGreatAgain.items.creativetap.TapLoader;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

@@ -13,12 +13,10 @@ public enum Mixins implements IMixins {
 
     EXAMPLE(new MixinBuilder().setPhase(Phase.EARLY)
         .addClientMixins("MixinMinecraft_Example")
-    .addClientMixins("Mixin_IC2CropSeed")
+        .addClientMixins("Mixin_IC2CropSeed")
         .addClientMixins("Mixin_TitleEntityCrop")
 
     );
-
-
 
     private final MixinBuilder builder;
 

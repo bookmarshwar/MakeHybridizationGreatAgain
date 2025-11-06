@@ -1,13 +1,12 @@
 package com.folk.MakeHybridizationGreatAgain.mixins.early;
 
-import bartworks.common.blocks.BWMachineBlockContainer;
-import bwcrossmod.BartWorksCrossmod;
 import net.minecraft.client.Minecraft;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 @Mixin(Minecraft.class) // the class targeted by this mixin
 public class MixinMinecraft_Example { // This is an example you should delete this class
 

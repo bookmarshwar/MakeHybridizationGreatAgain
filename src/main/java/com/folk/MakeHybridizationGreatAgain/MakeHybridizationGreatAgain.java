@@ -1,17 +1,11 @@
 package com.folk.MakeHybridizationGreatAgain;
 
-import com.folk.MakeHybridizationGreatAgain.loder.MachineLoader;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.folk.MakeHybridizationGreatAgain.loder.MachineLoader;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -19,7 +13,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import org.lwjgl.input.Keyboard;
 
 @Mod(
     modid = MakeHybridizationGreatAgain.MODID,
@@ -28,8 +21,9 @@ import org.lwjgl.input.Keyboard;
     acceptedMinecraftVersions = "[1.7.10]")
 
 public class MakeHybridizationGreatAgain {
+
     public static final boolean isInDevMode = true;
-    public static final String MODID = "MakeHybridizationGreatAgain";
+    public static final String MODID = "mhga";
     public static final Logger LOG = LogManager.getLogger(MODID);
 
     @SidedProxy(
@@ -52,7 +46,6 @@ public class MakeHybridizationGreatAgain {
         MinecraftForge.EVENT_BUS.register(this);
         MachineLoader.loadMachines();
     }
-
 
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
