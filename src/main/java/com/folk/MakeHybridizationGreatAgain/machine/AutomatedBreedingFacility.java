@@ -81,9 +81,9 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
         re = (byte) ((getResistanceFromStack(stack1) + getResistanceFromStack(stack2) + 1) / 2);
         if(!k){
             seeds.add(tec
-                .generateSeeds(cropcard1,ga ,gr, re, (byte) 4));
+                .generateSeeds(cropcard1,gr ,ga, re, (byte) 4));
             seeds.add(tec
-                .generateSeeds(cropcard2,ga ,gr, re, (byte) 4));
+                .generateSeeds(cropcard2,gr ,ga, re, (byte) 4));
 
             return seeds;
         }
@@ -91,25 +91,25 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
         switch (crossingMode){
             case Ga->{
 
-                if(gr<127){
-                    gr++;
-                }
-            }
-            case Re -> {
                 if(ga<127){
                     ga++;
                 }
             }
-            case Gr -> {
+            case Re -> {
                 if(re<127){
                     re++;
                 }
             }
+            case Gr -> {
+                if(gr<127){
+                    gr++;
+                }
+            }
         }
         seeds.add(tec
-            .generateSeeds(cropcard1,ga ,gr, re, (byte) 4));
+            .generateSeeds(cropcard1,gr ,ga, re, (byte) 4));
         seeds.add(tec
-            .generateSeeds(cropcard2,ga ,gr, re, (byte) 4));
+            .generateSeeds(cropcard2,gr ,ga, re, (byte) 4));
         return seeds;
     }
     private ItemStack getNewSpeedAndOne(ItemStack stack){
@@ -120,34 +120,34 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
 
         byte gr,ga,re;
         gr= getGrowthFromStack(stack);
-        ga= getGrowthFromStack(stack);
+        ga= getGainFromStack(stack);
         re=getResistanceFromStack(stack);
         if(!k){
 
             return tec
-                .generateSeeds(cropcard,ga ,gr, re, (byte) 4);
+                .generateSeeds(cropcard,gr ,ga, re, (byte) 4);
         }
 
         switch (crossingMode){
             case Ga->{
 
-                if(gr<127){
-                    gr++;
-                }
-            }
-            case Re -> {
                 if(ga<127){
                     ga++;
                 }
             }
-            case Gr -> {
+            case Re -> {
                 if(re<127){
                     re++;
                 }
             }
+            case Gr -> {
+                if(gr<127){
+                    gr++;
+                }
+            }
         }
         return tec
-            .generateSeeds(cropcard,ga ,gr, re, (byte) 4);
+            .generateSeeds(cropcard,gr ,ga, re, (byte) 4);
     }
     public void setCrossingMode(CrossingMode crossingMode) {
         this.crossingMode = crossingMode;
@@ -273,7 +273,8 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                         .adder(AutomatedBreedingFacility::addToMachineList)
                         .dot(1)
                         .casingIndex(CasingTextureId)
-                        .buildAndChain(GregTechAPI.sBlockCasings1, CasingTextureId))
+                        .buildAndChain(GregTechAPI.sBlockCasings11, CasingTextureId))
+
                 .build();
 
         }
