@@ -245,7 +245,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                 val -> {
                 setCrossingMode(CrossingMode.values()[val]);
                 disableWorking();
-                MakeHybridizationGreatAgain.LOG.info("cross run"+getCrossingMode().ordinal());
+                MakeHybridizationGreatAgain.LOG.info("cross set时"+getCrossingMode().ordinal());
             })
             .setTextureGetter(state -> {
                return new Text(CrossingMode.values()[state].getDisplayName());
@@ -260,10 +260,10 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     }
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        MakeHybridizationGreatAgain.LOG.info("cross save"+getCrossingMode().ordinal());
+        MakeHybridizationGreatAgain.LOG.info("cross 保存前"+getCrossingMode().ordinal());
         aNBT.setInteger("Runcount", count);
         aNBT.setInteger("crossingMode",getCrossingMode().ordinal());
-        MakeHybridizationGreatAgain.LOG.info("cross save"+getCrossingMode().ordinal());
+        MakeHybridizationGreatAgain.LOG.info("cross 保存时"+getCrossingMode().ordinal());
         super.saveNBTData(aNBT);
     }
     @Override
@@ -271,7 +271,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
 
         count= aNBT.getInteger("Runcount");
         setCrossingMode(CrossingMode.values()[aNBT.getInteger("crossingMode")]);
-        MakeHybridizationGreatAgain.LOG.info("cross load"+getCrossingMode().ordinal());
+        MakeHybridizationGreatAgain.LOG.info("cross 加载时"+getCrossingMode().ordinal());
         super.loadNBTData(aNBT);
     }
 }
