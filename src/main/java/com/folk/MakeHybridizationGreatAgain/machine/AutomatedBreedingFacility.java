@@ -23,6 +23,7 @@ import com.gtnewhorizons.modularui.common.widget.DynamicTextWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HatchElement;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -37,9 +38,11 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
 import ic2.core.crop.TileEntityCrop;
+import ic2.core.item.ItemCropSeed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -57,6 +60,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAn
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
+import static ic2.core.item.ItemCropSeed.*;
 
 public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFacility> implements IAddUIWidgets {
      int MY_WINDOW_ID = 9;
@@ -65,18 +69,165 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     public CrossingMode getCrossingMode() {
         return crossingMode;
     }
+    private List<ItemStack> getNewSpeedAndTwo(ItemStack stack1,ItemStack stack2){
+        CropCard cropcard1 = Crops.instance.getCropCard(stack1);
+        CropCard cropcard2 = Crops.instance.getCropCard(stack2);
+        List<ItemStack> seeds = new ArrayList<>(2);
+        TileEntityCrop tec = new TileEntityCrop();
+        boolean k=generetorTF();
+        byte gr,ga,re;
+        gr = (byte) ((getGrowthFromStack(stack1) + getGrowthFromStack(stack2) + 1) / 2);
+        ga = (byte) ((getGainFromStack(stack1) + getGainFromStack(stack2) + 1) / 2);
+        re = (byte) ((getResistanceFromStack(stack1) + getResistanceFromStack(stack2) + 1) / 2);
+        if(!k){
+            seeds.add(tec
+                .generateSeeds(cropcard1,ga ,gr, re, (byte) 4));
+            seeds.add(tec
+                .generateSeeds(cropcard2,ga ,gr, re, (byte) 4));
 
+            return seeds;
+        }
+
+        switch (crossingMode){
+            case Ga->{
+
+                if(gr<127){
+                    gr++;
+                }
+            }
+            case Re -> {
+                if(ga<127){
+                    ga++;
+                }
+            }
+            case Gr -> {
+                if(re<127){
+                    re++;
+                }
+            }
+        }
+        seeds.add(tec
+            .generateSeeds(cropcard1,ga ,gr, re, (byte) 4));
+        seeds.add(tec
+            .generateSeeds(cropcard2,ga ,gr, re, (byte) 4));
+        return seeds;
+    }
+    private ItemStack getNewSpeedAndOne(ItemStack stack){
+
+        CropCard cropcard = Crops.instance.getCropCard(stack);
+        TileEntityCrop tec = new TileEntityCrop();
+        boolean k=generetorTF();
+
+        byte gr,ga,re;
+        gr= getGrowthFromStack(stack);
+        ga= getGrowthFromStack(stack);
+        re=getResistanceFromStack(stack);
+        if(!k){
+
+            return tec
+                .generateSeeds(cropcard,ga ,gr, re, (byte) 4);
+        }
+
+        switch (crossingMode){
+            case Ga->{
+
+                if(gr<127){
+                    gr++;
+                }
+            }
+            case Re -> {
+                if(ga<127){
+                    ga++;
+                }
+            }
+            case Gr -> {
+                if(re<127){
+                    re++;
+                }
+            }
+        }
+        return tec
+            .generateSeeds(cropcard,ga ,gr, re, (byte) 4);
+    }
     public void setCrossingMode(CrossingMode crossingMode) {
         this.crossingMode = crossingMode;
     }
+
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing() {
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = 100;
-        this.count++;
-        MakeHybridizationGreatAgain.LOG.info("cross run"+getCrossingMode().ordinal());
-        return CheckRecipeResultRegistry.SUCCESSFUL;
+        this.lEUt = -1024;
+        this.mEfficiency=10000;
+        mOutputItems = null;
+        mOutputFluids = null;
+        List<ItemStack> inputStacks = getStoredInputs();
+        if (inputStacks.isEmpty()) {
+            return CheckRecipeResultRegistry.NO_RECIPE;
+        }
+
+        List<ItemStack> foundSeeds = new ArrayList<>(2);
+        for (ItemStack stack : inputStacks) {
+            if (stack.getItem() instanceof ItemCropSeed) {
+                foundSeeds.add(stack);
+                if (foundSeeds.size() >= 2) {
+                    break;
+                }
+            }
+        }
+
+        switch (foundSeeds.size()) {
+            case 1 -> {
+                ItemStack stack = foundSeeds.get(0);
+                if (stack.stackSize < 2) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                ItemStack newSeed = getNewSpeedAndOne(stack.copy());
+                newSeed.stackSize = 2;
+                mOutputItems = new ItemStack[]{newSeed};
+
+                mMaxProgresstime = 100;
+                mEfficiencyIncrease = 10000;
+                this.count++;
+
+                ItemStack stackToConsume =
+                    stack.copy();
+                stackToConsume.stackSize=2;
+                if (!depleteInput(stackToConsume)) {
+                    return CheckRecipeResultRegistry.INTERNAL_ERROR;
+                }
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+            case 2 -> {
+
+                List<ItemStack> newSeeds = getNewSpeedAndTwo(foundSeeds.get(0).copy(), foundSeeds.get(1).copy());
+
+                mOutputItems = new ItemStack[]{
+                    newSeeds.get(0),
+                    newSeeds.get(1)
+                };
+
+                mMaxProgresstime = 100;
+                mEfficiencyIncrease = 10000;
+                this.count++;
+                ItemStack stackToConsume1 =
+                    foundSeeds.get(0).copy();
+                stackToConsume1.stackSize=1;
+                ItemStack stackToConsume2 =
+                    foundSeeds.get(1).copy();
+                stackToConsume2.stackSize=1;
+
+                if (!depleteInput(stackToConsume1) || !depleteInput(stackToConsume2)) {
+                    return CheckRecipeResultRegistry.INTERNAL_ERROR;
+                }
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+            default -> {
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+        }
     }
     private CrossingMode crossingMode=CrossingMode.Ga;
     private static int CasingTextureId=11;
@@ -96,6 +247,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     public AutomatedBreedingFacility(String aName) {
         super(aName);
     }
+
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
 
@@ -117,7 +269,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                 .addElement(
                     'B',
                     HatchElementBuilder.<AutomatedBreedingFacility>builder()
-                        .atLeast(HatchElement.InputHatch, HatchElement.OutputHatch)
+                        .atLeast(HatchElement.InputHatch, HatchElement.OutputHatch,HatchElement.Energy)
                         .adder(AutomatedBreedingFacility::addToMachineList)
                         .dot(1)
                         .casingIndex(CasingTextureId)
@@ -131,8 +283,8 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType("育种站/ic2分析仪")
-            .addInfo("§c'要是那时的我也能掌握繁殖的技术就好了'")
+        tt.addMachineType("自动化育种设施")
+            .addInfo("§c'要是那时的我也能掌握繁育的技术就好了'")
             .addInfo("§4属于基因的力量在涌动")
             .addInfo("§1也许这只是§b杂交§1再次伟大的开始!")
             .addSeparator()
