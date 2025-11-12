@@ -7,10 +7,8 @@ import com.folk.MakeHybridizationGreatAgain.util.Utils;
 
 public enum ItemList {
 
-    IntensifyChemicalDistorter,
     CropEngineer,
-    AutomatedBreedingFacility,
-    MegaIsaForge;
+    AutomatedBreedingFacility;
 
     private boolean mHasNotBeenSet;
     private boolean mDeprecated;

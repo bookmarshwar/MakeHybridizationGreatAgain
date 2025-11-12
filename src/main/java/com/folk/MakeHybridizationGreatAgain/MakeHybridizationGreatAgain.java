@@ -1,5 +1,9 @@
 package com.folk.MakeHybridizationGreatAgain;
 
+import com.folk.MakeHybridizationGreatAgain.recipe.RecipeLoader;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +17,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
+import java.io.InputStream;
 
 @Mod(
     modid = MakeHybridizationGreatAgain.MODID,
@@ -45,6 +51,7 @@ public class MakeHybridizationGreatAgain {
         proxy.init(event);
         MinecraftForge.EVENT_BUS.register(this);
         MachineLoader.loadMachines();
+        RecipeLoader.addRecipes();
     }
 
     @Mod.EventHandler
@@ -57,5 +64,9 @@ public class MakeHybridizationGreatAgain {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+    }
+
+    public void getImage(){
+
     }
 }

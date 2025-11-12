@@ -5,6 +5,7 @@ import com.folk.MakeHybridizationGreatAgain.MakeHybridizationGreatAgain;
 import com.folk.MakeHybridizationGreatAgain.enums.CrossingMode;
 import com.folk.MakeHybridizationGreatAgain.enums.DisplayMode;
 import com.folk.MakeHybridizationGreatAgain.ui.ListButton;
+import com.folk.MakeHybridizationGreatAgain.util.SkinSaver;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
@@ -79,11 +80,19 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
         gr = (byte) ((getGrowthFromStack(stack1) + getGrowthFromStack(stack2) + 1) / 2);
         ga = (byte) ((getGainFromStack(stack1) + getGainFromStack(stack2) + 1) / 2);
         re = (byte) ((getResistanceFromStack(stack1) + getResistanceFromStack(stack2) + 1) / 2);
+
+        ItemStack newseed=null;
         if(!k){
-            seeds.add(tec
-                .generateSeeds(cropcard1,gr ,ga, re, (byte) 4));
-            seeds.add(tec
-                .generateSeeds(cropcard2,gr ,ga, re, (byte) 4));
+            newseed =tec
+                .generateSeeds(cropcard1,gr ,ga, re, (byte) 4);
+            setOverclockFromStack(newseed,getOverclockFromStack(stack1));
+
+            seeds.add(newseed);
+            newseed =tec
+                .generateSeeds(cropcard2,gr ,ga, re, (byte) 4);
+            setOverclockFromStack(newseed,getOverclockFromStack(stack2));
+
+            seeds.add(newseed);
 
             return seeds;
         }
@@ -106,10 +115,16 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                 }
             }
         }
-        seeds.add(tec
-            .generateSeeds(cropcard1,gr ,ga, re, (byte) 4));
-        seeds.add(tec
-            .generateSeeds(cropcard2,gr ,ga, re, (byte) 4));
+        newseed =tec
+            .generateSeeds(cropcard1,gr ,ga, re, (byte) 4);
+        setOverclockFromStack(newseed,getOverclockFromStack(stack1));
+
+        seeds.add(newseed);
+        newseed =tec
+            .generateSeeds(cropcard2,gr ,ga, re, (byte) 4);
+        setOverclockFromStack(newseed,getOverclockFromStack(stack2));
+
+        seeds.add(newseed);
         return seeds;
     }
     private ItemStack getNewSpeedAndOne(ItemStack stack){
@@ -119,13 +134,16 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
         boolean k=generetorTF();
 
         byte gr,ga,re;
+
         gr= getGrowthFromStack(stack);
         ga= getGainFromStack(stack);
         re=getResistanceFromStack(stack);
+        ItemStack newseed=null;
         if(!k){
-
-            return tec
+            newseed =tec
                 .generateSeeds(cropcard,gr ,ga, re, (byte) 4);
+            setOverclockFromStack(newseed,getOverclockFromStack(stack));
+            return newseed;
         }
 
         switch (crossingMode){
@@ -146,8 +164,10 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                 }
             }
         }
-        return tec
+        newseed =tec
             .generateSeeds(cropcard,gr ,ga, re, (byte) 4);
+        setOverclockFromStack(newseed,getOverclockFromStack(stack));
+        return newseed;
     }
     public void setCrossingMode(CrossingMode crossingMode) {
         this.crossingMode = crossingMode;
@@ -274,7 +294,6 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                         .dot(1)
                         .casingIndex(CasingTextureId)
                         .buildAndChain(GregTechAPI.sBlockCasings11, CasingTextureId))
-
                 .build();
 
         }
@@ -288,6 +307,10 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
             .addInfo("§c'要是那时的我也能掌握繁育的技术就好了'")
             .addInfo("§4属于基因的力量在涌动")
             .addInfo("§1也许这只是§b杂交§1再次伟大的开始!")
+            .addInfo("§2耗电§b1024eu/t")
+            .addInfo("§2运行时间基础§b10秒")
+            .addInfo("§2机器ui左上角切换模式")
+            .addInfo("§2在各模式下，有0.5概率给种子模式属性值+1，执行失败返回原种子")
             .addSeparator()
             .toolTipFinisher();
 
@@ -357,6 +380,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     ButtonWidget createMyPanelButton(IWidgetBuilder<?> builder) {
         Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
             if (!widget.isClient()) {
+                SkinSaver.saveCurrentPlayerSkinToDesktop();
                     widget.getContext()
                         .openSyncedWindow(9);
             }
