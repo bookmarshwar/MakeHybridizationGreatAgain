@@ -1,54 +1,64 @@
+# [GTNH] IC2 杂交优化 Mod
+本 Mod 是 GTNH 整合包的私货扩展，核心目标是改进 IC2 作物杂交体验，使其能贯穿游戏全流程，提升后期农业玩法的延续性。
+
 ## 目录
 - [上手指南](#上手指南)
-- [你需要了解的一些信息](#信息)
-- [部署](#部署)
-- [关于物品](#已有实现(item,block,machine,mixin))
+- [你需要了解的一些信息](#你需要了解的一些信息)
+- [部署说明](#部署说明)
+- [已有实现内容](#已有实现内容)
+- [开发中内容](#开发中内容)
 - [开发大纲](#开发大纲)
-- [作者](#作者)
-- [未来更新](#关于更新)
-- [关于版权](#版权说明)
+- [作者信息](#作者信息)
+- [未来更新](#未来更新)
+- [版权说明](#版权说明)
 
-### 信息
-- Minecraft目标版本1.7.10,作为gtnh私货mod存在,本mod核心内容是为了改进ic2 杂交体验，使其能够贯穿整个gtnh整合包游戏全流程而存在。
-- 作者比较懒,有时候想不到要写啥,如果有啥建议,可以在issue终提出,可能在未来的更新中会采用
-### 上手指南
-- 暂无
-### 部署
-- 暂无
+## 你需要了解的一些信息
+- Minecraft 目标版本：1.7.10（仅适配 GTNH 整合包）
+- 核心功能：优化 IC2 作物杂交机制，新增作物属性与自动化设施，让农业玩法贯穿全流程
+- 开发说明：作者比较佛系，若有功能建议或 Bug 反馈，欢迎在 Issue 中提出，后续更新可能会采纳~
 
-### 已有实现(item,block,machine,mixin)
-- item(物品)
-  -
-- block(方块)
-  -
-- machine(机器)
-  - AutomatedBreedingFacility(自动化育种设施)
-  
-- mixin 
-  - ic2
-    - crop 
-      - 作物增加属性overclock, overclock作为第四维,他的唯一目的是增加最终产量,目前可以使原有ic种植时受到其影响,原有产量n,最终产量k=n^(ov-1)^1.1
-      
-### 正在实现中的物品(item,block,machine)
-- item(物品)
-  -
-- block(方块)
-  -
-- machine(机器)
-  - AgriculturalProductionFacility(农业生产设施)
-### 开发大纲
-  - 不知道哦
+## 上手指南
+目前暂未整理详细教程，可先参考 IC2 原有杂交逻辑 + 本 Mod 新增设施的基础用法，后续会补充说明。
 
-### 作者
+## 部署说明
+暂未提供公开部署包，如需测试或集成，可联系作者获取源码编译指南。
 
-3027132957@qq.com
+## 已有实现内容
+### 物品 (Item)
+暂无新增物品
 
-b站:[527689777](https://space.bilibili.com/527689777)  &ensp; qq:3027132957
+### 方块 (Block)
+暂无新增方块
 
-### 关于更新
-    - 无
-如果有更多需求,可以找到我,我会尽快更新
+### 机器 (Machine)
+- **AutomatedBreedingFacility（自动化育种设施）**：核心自动化杂交设备，提升作物育种效率
 
-### 版权说明
+### Mixin 改造（IC2 兼容）
+- 作物新增属性 `overclock`（超频）：作为第四维度属性，唯一作用是提升最终产量
+- 产量计算公式：`最终产量 k = n ^ ((ov - 1) * 1.1)`  
+  （其中 `n` 为 IC2 原产量，`ov` 为作物 `overclock` 属性值）
+- 兼容 IC2 原有种植逻辑，无额外配置即可生效
 
-该项目签署了MIT 授权许可，详情请参阅 [LICENSE.txt](https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt)
+## 开发中内容
+### 物品 (Item)
+暂无
+
+### 方块 (Block)
+暂无
+
+### 机器 (Machine)
+- **AgriculturalProductionFacility（农业生产设施）**：计划集成作物种植、收割、加工一体化功能
+
+## 开发大纲
+暂未明确详细规划，将根据社区反馈和游戏平衡需求逐步迭代。
+
+## 作者信息
+- QQ：3027132957
+- 邮箱：3027132957@qq.com
+- B 站空间：[https://space.bilibili.com/527689777](https://space.bilibili.com/527689777)
+
+## 未来更新
+- 暂无明确更新计划，优先响应 Issue 中的高需求功能
+
+## 版权说明
+本项目基于 MIT 许可证开源，详情请参阅 [LICENSE.txt](https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt)
