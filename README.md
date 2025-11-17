@@ -31,7 +31,7 @@
 暂无新增方块
 
 ### 机器 (Machine)
-- **AutomatedBreedingFacility（自动化育种设施）**：核心自动化杂交设备，提升作物育种效率
+- **AutomatedBreedingFacility（自动化育种设施）**
 
 ### Mixin 改造（IC2 兼容）
 - 作物新增属性 `overclock`（超频）：作为第四维度属性，唯一作用是提升最终产量
@@ -47,7 +47,7 @@
 暂无
 
 ### 机器 (Machine)
-- **AgriculturalProductionFacility（农业生产设施）**：计划集成作物种植、收割、加工一体化功能
+- **AgriculturalProductionFacility（农业生产设施）**
 
 ## 开发大纲
 暂未明确详细规划，将根据社区反馈和游戏平衡需求逐步迭代。
