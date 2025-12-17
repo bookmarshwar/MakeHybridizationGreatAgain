@@ -40,14 +40,20 @@ import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
 import ic2.core.crop.TileEntityCrop;
 import ic2.core.item.ItemCropSeed;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,6 +72,8 @@ import static ic2.core.item.ItemCropSeed.*;
 public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFacility> implements IAddUIWidgets {
      int MY_WINDOW_ID = 9;
     private int count = 0;//运行计数器
+
+
 
     public CrossingMode getCrossingMode() {
         return crossingMode;
@@ -450,5 +458,29 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
         setCrossingMode(CrossingMode.values()[aNBT.getInteger("crossingMode")]);
         MakeHybridizationGreatAgain.LOG.info("cross 加载时"+getCrossingMode().ordinal());
         super.loadNBTData(aNBT);
+    }
+    @Override
+    public void onRenderWorldLast(TileEntity te, RenderWorldLastEvent event) {
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayerSP player = mc.thePlayer;
+        double renderX = player.prevPosX + (player.posX - player.prevPosX) * event.partialTicks;
+        double renderY = player.prevPosY + (player.posY - player.prevPosY) * event.partialTicks;
+        double renderZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
+        double centerX = te.xCoord + 0.5;
+        double centerY = te.yCoord + 1.5;
+        double centerZ = te.zCoord + 0.5;
+        double radius = 2.0;
+        long time = System.currentTimeMillis();
+        float angle = (time % 72000L) / 50.0F;
+        double radians = Math.toRadians(angle);
+        double worldX = centerX + radius * Math.cos(radians);
+        double worldZ = centerZ + radius * Math.sin(radians);
+        double worldY = centerY;
+        Block blockToRender = Blocks.diamond_block;
+        mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        this.renderRun()
+            .renderBlockAt(worldX, worldY, worldZ, blockToRender, renderX, renderY, renderZ,angle)
+            .renderEnd();
+
     }
 }
