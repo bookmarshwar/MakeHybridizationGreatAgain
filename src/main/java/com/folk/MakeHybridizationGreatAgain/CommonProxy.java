@@ -1,7 +1,7 @@
 package com.folk.MakeHybridizationGreatAgain;
 
-import com.folk.MakeHybridizationGreatAgain.items.ItemsLoader;
-import com.folk.MakeHybridizationGreatAgain.items.creativetap.TapLoader;
+import com.folk.MakeHybridizationGreatAgain.loader.ItemsLoader;
+import com.folk.MakeHybridizationGreatAgain.loader.TapLoader;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -30,4 +30,7 @@ public class CommonProxy {
 
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {}
+    public void registerRenderers() {
+        // 在服务端，这个方法是空的
+    }
 }

@@ -1,15 +1,13 @@
 package com.folk.MakeHybridizationGreatAgain;
 
-import com.folk.MakeHybridizationGreatAgain.recipe.RecipeLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.util.ResourceLocation;
+import com.folk.MakeHybridizationGreatAgain.materials.WerkstoffLoader;
+import com.folk.MakeHybridizationGreatAgain.loader.RecipeLoader;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.folk.MakeHybridizationGreatAgain.loder.MachineLoader;
+import com.folk.MakeHybridizationGreatAgain.loader.MachineLoader;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -17,8 +15,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-
-import java.io.InputStream;
 
 @Mod(
     modid = MakeHybridizationGreatAgain.MODID,
@@ -42,6 +38,7 @@ public class MakeHybridizationGreatAgain {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
+        WerkstoffLoader.init();
     }
 
     @Mod.EventHandler
@@ -49,6 +46,7 @@ public class MakeHybridizationGreatAgain {
     public void init(FMLInitializationEvent event) {
 
         proxy.init(event);
+
         MinecraftForge.EVENT_BUS.register(this);
         MachineLoader.loadMachines();
         RecipeLoader.addRecipes();

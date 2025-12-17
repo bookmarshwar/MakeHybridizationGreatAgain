@@ -1,6 +1,6 @@
-package com.folk.MakeHybridizationGreatAgain.recipe;
+package com.folk.MakeHybridizationGreatAgain.loader;
 
-import com.folk.MakeHybridizationGreatAgain.items.ItemList;
+import com.folk.MakeHybridizationGreatAgain.enums.ItemList;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -8,9 +8,7 @@ import gregtech.api.enums.OrePrefixes;
 
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTUtility;
 
 
 public class RecipeLoader {

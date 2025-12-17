@@ -4,6 +4,7 @@ import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
+import gregtech.api.render.ISBRWorldContext;
 
 public abstract class BaseMachine<T extends BaseMachine<T>> extends MTEExtendedPowerMultiBlockBase<T>
     implements IConstructable, ISurvivalConstructable {
@@ -25,5 +26,6 @@ public abstract class BaseMachine<T extends BaseMachine<T>> extends MTEExtendedP
         mSolderingTool = true;
         mWrench = true;
     }
+
 
 }

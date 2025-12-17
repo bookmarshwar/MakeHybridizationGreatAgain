@@ -1,4 +1,4 @@
-package com.folk.MakeHybridizationGreatAgain.items;
+package com.folk.MakeHybridizationGreatAgain.enums;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

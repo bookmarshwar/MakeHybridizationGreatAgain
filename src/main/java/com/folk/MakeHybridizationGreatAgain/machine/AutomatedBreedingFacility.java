@@ -293,7 +293,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                         .adder(AutomatedBreedingFacility::addToMachineList)
                         .dot(1)
                         .casingIndex(CasingTextureId)
-                        .buildAndChain(GregTechAPI.sBlockCasings11, CasingTextureId))
+                        .buildAndChain(GregTechAPI.sBlockCasings1, CasingTextureId))
                 .build();
 
         }

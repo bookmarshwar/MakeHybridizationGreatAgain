@@ -1,9 +1,9 @@
-package com.folk.MakeHybridizationGreatAgain.loder;
+package com.folk.MakeHybridizationGreatAgain.loader;
 
 import com.folk.MakeHybridizationGreatAgain.machine.AutomatedBreedingFacility;
 import net.minecraft.item.ItemStack;
 
-import com.folk.MakeHybridizationGreatAgain.items.ItemList;
+import com.folk.MakeHybridizationGreatAgain.enums.ItemList;
 import com.folk.MakeHybridizationGreatAgain.machine.CropEngineer;
 
 public class MachineLoader {

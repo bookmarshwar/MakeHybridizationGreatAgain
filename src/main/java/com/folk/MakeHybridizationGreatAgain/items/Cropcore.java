@@ -2,7 +2,7 @@ package com.folk.MakeHybridizationGreatAgain.items;
 
 import net.minecraft.item.Item;
 
-import com.folk.MakeHybridizationGreatAgain.items.creativetap.TapLoader;
+import com.folk.MakeHybridizationGreatAgain.loader.TapLoader;
 
 public class Cropcore extends Item {
 
