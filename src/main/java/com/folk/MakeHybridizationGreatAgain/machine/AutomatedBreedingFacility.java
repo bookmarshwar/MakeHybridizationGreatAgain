@@ -1,11 +1,16 @@
 package com.folk.MakeHybridizationGreatAgain.machine;
 
 import bartworks.API.BorosilicateGlass;
+import com.emoniph.witchery.item.ItemDuplicationStaff;
 import com.folk.MakeHybridizationGreatAgain.MakeHybridizationGreatAgain;
 import com.folk.MakeHybridizationGreatAgain.enums.CrossingMode;
 import com.folk.MakeHybridizationGreatAgain.enums.DisplayMode;
+import com.folk.MakeHybridizationGreatAgain.loader.RecipeLoader;
 import com.folk.MakeHybridizationGreatAgain.ui.ListButton;
 import com.folk.MakeHybridizationGreatAgain.util.SkinSaver;
+import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
+import com.gtnewhorizon.structurelib.alignment.enumerable.Flip;
+import com.gtnewhorizon.structurelib.alignment.enumerable.Rotation;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
@@ -31,6 +36,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -38,28 +44,34 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
+import ic2.core.crop.IC2Crops;
 import ic2.core.crop.TileEntityCrop;
 import ic2.core.item.ItemCropSeed;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 import static com.folk.MakeHybridizationGreatAgain.machine.CropEngineer.TTS;
 import static com.folk.MakeHybridizationGreatAgain.util.Utils.*;
@@ -182,6 +194,17 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     }
 
     @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        return (direction, rotation, flip) -> (
+            direction == ForgeDirection.NORTH||
+            direction ==ForgeDirection.SOUTH||
+            direction ==ForgeDirection.EAST||
+            direction ==ForgeDirection.WEST) &&
+            rotation == Rotation.NORMAL &&
+            flip == Flip.NONE;
+    }
+
+    @Override
     @NotNull
     public CheckRecipeResult checkProcessing() {
         this.lEUt = -1024;
@@ -287,6 +310,11 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
     }
 
     @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeLoader.AutomatedBreedingFacility;
+    }
+
+    @Override
     public IStructureDefinition<AutomatedBreedingFacility> getStructureDefinition() {
         if (STRUCTURE_DEF == null) {
             STRUCTURE_DEF = StructureDefinition.<AutomatedBreedingFacility>builder()
@@ -302,6 +330,7 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
                         .dot(1)
                         .casingIndex(CasingTextureId)
                         .buildAndChain(GregTechAPI.sBlockCasings1, CasingTextureId))
+
                 .build();
 
         }
@@ -466,21 +495,26 @@ public class AutomatedBreedingFacility extends BaseMachine<AutomatedBreedingFaci
         double renderX = player.prevPosX + (player.posX - player.prevPosX) * event.partialTicks;
         double renderY = player.prevPosY + (player.posY - player.prevPosY) * event.partialTicks;
         double renderZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
-        double centerX = te.xCoord + 0.5;
-        double centerY = te.yCoord + 1.5;
-        double centerZ = te.zCoord + 0.5;
-        double radius = 2.0;
+        IGregTechTileEntity gtTe = (IGregTechTileEntity) te;
+        ForgeDirection front = gtTe.getFrontFacing();
+        ForgeDirection back = front.getOpposite();
+        ItemStack itemToRender = ItemCropSeed.generateItemStackFromValues(
+            IC2Crops.weed, // 作物卡片
+            (byte) 1,      // 生长属性
+            (byte) 1,      // 增益属性
+            (byte) 1,      // 抗性属性
+            (byte) 4       // 扫描等级
+        );
+        if (itemToRender == null || itemToRender.getItem() == null) {
+            return;
+        }
+        double targetX = te.xCoord + 0.5 + back.offsetX*2;
+        double targetY = te.yCoord + 1.5 +0.5 + back.offsetY;
+        double targetZ = te.zCoord + 0.5 + back.offsetZ*2;
         long time = System.currentTimeMillis();
-        float angle = (time % 72000L) / 50.0F;
-        double radians = Math.toRadians(angle);
-        double worldX = centerX + radius * Math.cos(radians);
-        double worldZ = centerZ + radius * Math.sin(radians);
-        double worldY = centerY;
-        Block blockToRender = Blocks.diamond_block;
-        mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-        this.renderRun()
-            .renderBlockAt(worldX, worldY, worldZ, blockToRender, renderX, renderY, renderZ,angle)
-            .renderEnd();
+        float angle = (time % 72000L) / 10.0F;
+        if(gtTe.isActive()) this.renderItemAt(targetX, targetY, targetZ, itemToRender, renderX, renderY, renderZ, angle,2f);
+
 
     }
 }
