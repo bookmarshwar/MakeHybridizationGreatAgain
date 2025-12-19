@@ -1,5 +1,4 @@
-
-name: Custom Build with Java 17
+name: Build with Java 17 Override
 
 on:
   pull_request:
@@ -8,55 +7,36 @@ on:
     branches: [master, main]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     
+    # 首先设置 Java 17，然后运行原工作流
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      # 强制使用 Java 17
+      # 强制设置 Java 17
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           
-      # 验证 Java 版本
-      - name: Verify Java version
+      # 手动下载并运行原工作流的内容
+      # 或者直接运行构建命令
+      - name: Clone GTNH workflows
         run: |
-          java -version
-          javac -version
-          echo "JAVA_HOME: $JAVA_HOME"
+          git clone --depth 1 https://github.com/GTNewHorizons/GTNH-Actions-Workflows.git /tmp/gtnh-workflows
           
-      # 确保脚本可执行
-      - name: Make scripts executable
+      - name: Execute build steps
         run: |
+          # 这里可以运行原工作流中的具体步骤
           chmod +x gradlew
-          if [ -d ".gtnh-workflows" ]; then
-            find .gtnh-workflows -name "*.sh" -exec chmod +x {} \; || true
-          fi
+          ./gradlew clean build
           
-      # 设置 Gradle 缓存
-      - name: Setup Gradle caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          
-      # 运行 Gradle 构建
-      - name: Build with Gradle
-        run: |
-          ./gradlew clean
-          ./gradlew build --no-daemon --stacktrace
-          
-      # 运行测试（如果存在）
-      - name: Run GTNH tests
+      # 运行测试
+      - name: Run tests
         run: |
           if [ -f ".gtnh-workflows/scripts/test_no_error_reports" ]; then
             .gtnh-workflows/scripts/test_no_error_reports
-          else
-            echo "No test script found"
           fi
