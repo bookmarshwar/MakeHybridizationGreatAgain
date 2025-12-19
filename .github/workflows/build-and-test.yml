@@ -1,10 +1,10 @@
-name: Build with Java 17
+name: Build and test
 
 on:
   pull_request:
-    branches: [master, main]
+    branches: [ master, main ]
   push:
-    branches: [master, main]
+    branches: [ master, main ]
 
 jobs:
   build:
@@ -20,67 +20,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          
-      # 2. 验证 Java 版本
-      - name: Verify Java version
-        run: |
-          echo "Java version:"
-          java -version
-          echo "JAVA_HOME: $JAVA_HOME"
-          echo "PATH: $PATH"
-          
-      # 3. 设置环境变量确保 Gradle 使用 Java 17
-      - name: Set environment variables
-        run: |
-          echo "JAVA_HOME=${JAVA_HOME}" >> $GITHUB_ENV
-          echo "GRADLE_OPTS=-Dorg.gradle.java.home=${JAVA_HOME}" >> $GITHUB_ENV
-          
-      # 4. 确保脚本可执行
-      - name: Make scripts executable
-        run: |
-          chmod +x gradlew
-          if [ -d ".gtnh-workflows" ]; then
-            find .gtnh-workflows -type f -name "*.sh" -exec chmod +x {} \;
-          fi
-          chmod +x .gtnh-workflows/scripts/test_no_error_reports 2>/dev/null || true
-          
-      # 5. 清理可能的残留缓存
-      - name: Clean Gradle cache
-        run: |
-          ./gradlew --stop || true
-          rm -rf ~/.gradle/caches/* || true
-          
-      # 6. 配置 Gradle 使用 Java 17
-      - name: Configure Gradle for Java 17
-        run: |
-          # 创建 gradle.properties 文件强制使用 Java 17
-          cat > gradle.properties << EOF
-org.gradle.java.home=$JAVA_HOME
-org.gradle.jvmargs=-Xmx4g -XX:+UseG1GC
-sourceCompatibility=17
-targetCompatibility=17
-EOF
-          
-      # 7. 设置 Gradle 缓存
-      - name: Setup Gradle caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle
-            
-      # 8. 使用 Java 17 运行构建
-      - name: Build with Gradle (Java 17)
-        run: |
-          echo "Building with Java 17..."
-          ./gradlew clean --stacktrace
-          ./gradlew build --stacktrace --info
-          
-      # 9. 运行测试
-      - name: Run GTNH tests
-        run: |
-          echo "Running tests..."
-          ./.gtnh-workflows/scripts/test_no_error_reports
+  build-and-test:
+    uses: GTNewHorizons/GTNH-Actions-Workflows/.github/workflows/build-and-test.yml@master
+    secrets: inherit
+    with:
+      timeout: 900
