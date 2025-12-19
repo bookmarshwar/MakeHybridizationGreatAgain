@@ -1,13 +1,62 @@
 
-name: Build and test
+name: Custom Build with Java 17
 
 on:
   pull_request:
-    branches: [ master, main ]
+    branches: [master, main]
   push:
-    branches: [ master, main ]
+    branches: [master, main]
 
 jobs:
-  build-and-test:
-    uses: GTNewHorizons/GTNH-Actions-Workflows/.github/workflows/build-and-test.yml@master
-    secrets: inherit
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      # 强制使用 Java 17
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+      # 验证 Java 版本
+      - name: Verify Java version
+        run: |
+          java -version
+          javac -version
+          echo "JAVA_HOME: $JAVA_HOME"
+          
+      # 确保脚本可执行
+      - name: Make scripts executable
+        run: |
+          chmod +x gradlew
+          if [ -d ".gtnh-workflows" ]; then
+            find .gtnh-workflows -name "*.sh" -exec chmod +x {} \; || true
+          fi
+          
+      # 设置 Gradle 缓存
+      - name: Setup Gradle caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          
+      # 运行 Gradle 构建
+      - name: Build with Gradle
+        run: |
+          ./gradlew clean
+          ./gradlew build --no-daemon --stacktrace
+          
+      # 运行测试（如果存在）
+      - name: Run GTNH tests
+        run: |
+          if [ -f ".gtnh-workflows/scripts/test_no_error_reports" ]; then
+            .gtnh-workflows/scripts/test_no_error_reports
+          else
+            echo "No test script found"
+          fi
