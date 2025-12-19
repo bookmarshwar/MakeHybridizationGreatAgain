@@ -1,7 +1,8 @@
 package com.folk.MakeHybridizationGreatAgain.loader;
 
-import com.folk.MakeHybridizationGreatAgain.items.creativetap.Tap;
 import net.minecraft.creativetab.CreativeTabs;
+
+import com.folk.MakeHybridizationGreatAgain.items.creativetap.Tap;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 

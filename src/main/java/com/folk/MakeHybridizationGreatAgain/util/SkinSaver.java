@@ -1,16 +1,19 @@
 package com.folk.MakeHybridizationGreatAgain.util;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.util.ResourceLocation;
-import org.apache.commons.codec.digest.DigestUtils;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import javax.imageio.ImageIO;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
 public class SkinSaver {
+
     public static void saveCurrentPlayerSkinToDesktop() {
         AbstractClientPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player == null) {
@@ -49,9 +52,12 @@ public class SkinSaver {
     private static BufferedImage getSkinFromMemory(AbstractClientPlayer player) {
         try {
             ResourceLocation skinLocation = player.getLocationSkin();
-            Object texture = Minecraft.getMinecraft().getTextureManager().getTexture(skinLocation);
+            Object texture = Minecraft.getMinecraft()
+                .getTextureManager()
+                .getTexture(skinLocation);
             if (texture instanceof net.minecraft.client.renderer.ThreadDownloadImageData) {
-                Field bufferField = net.minecraft.client.renderer.ThreadDownloadImageData.class.getDeclaredField("bufferedImage");
+                Field bufferField = net.minecraft.client.renderer.ThreadDownloadImageData.class
+                    .getDeclaredField("bufferedImage");
                 bufferField.setAccessible(true);
                 return (BufferedImage) bufferField.get(texture);
             }
@@ -64,7 +70,9 @@ public class SkinSaver {
     // 从缓存目录获取皮肤
     private static BufferedImage getSkinFromCache(AbstractClientPlayer player) {
         try {
-            String uuid = player.getUniqueID().toString().replace("-", "");
+            String uuid = player.getUniqueID()
+                .toString()
+                .replace("-", "");
             String hash = DigestUtils.sha256Hex(uuid);
             File skinFile = new File(Minecraft.getMinecraft().mcDataDir, "assets/skins/4c/" + hash);
             if (skinFile.exists()) {

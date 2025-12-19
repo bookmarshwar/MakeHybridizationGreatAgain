@@ -1,9 +1,9 @@
 package com.folk.MakeHybridizationGreatAgain.loader;
 
-import com.folk.MakeHybridizationGreatAgain.machine.AutomatedBreedingFacility;
 import net.minecraft.item.ItemStack;
 
 import com.folk.MakeHybridizationGreatAgain.enums.ItemList;
+import com.folk.MakeHybridizationGreatAgain.machine.AutomatedBreedingFacility;
 import com.folk.MakeHybridizationGreatAgain.machine.CropEngineer;
 
 public class MachineLoader {
@@ -19,7 +19,8 @@ public class MachineLoader {
 
     public static void loadMachines() {
         CropEngineer = new CropEngineer(newID(ID), "CropEngineer", "育种站").getStackForm(1);
-        AutomatedBreedingFacility = new AutomatedBreedingFacility(newID(ID),"AutomatedBreedingFacility","自动化育种设施").getStackForm(1);
+        AutomatedBreedingFacility = new AutomatedBreedingFacility(newID(ID), "AutomatedBreedingFacility", "自动化育种设施")
+            .getStackForm(1);
         ItemList.AutomatedBreedingFacility.set(AutomatedBreedingFacility);
         ItemList.CropEngineer.set(CropEngineer);
 

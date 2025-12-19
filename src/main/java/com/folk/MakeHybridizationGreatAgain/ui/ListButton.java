@@ -1,14 +1,14 @@
 package com.folk.MakeHybridizationGreatAgain.ui;
 
 import java.util.function.Consumer;
-
 import java.util.function.Supplier;
+
+import net.minecraft.network.PacketBuffer;
 
 import com.gtnewhorizons.modularui.api.widget.Interactable;
 import com.gtnewhorizons.modularui.common.widget.CycleButtonWidget;
 
 import gregtech.api.gui.modularui.GTUITextures;
-import net.minecraft.network.PacketBuffer;
 
 public class ListButton extends CycleButtonWidget {
 
@@ -72,9 +72,9 @@ public class ListButton extends CycleButtonWidget {
 
     @Override
     public void onInit() {
-        if(isClient()){
+        if (isClient()) {
             syncToServer(2, buffer -> buffer.writeVarIntToBuffer(this.state));
-        }else{
+        } else {
             if (this.selectIndexGetter != null) {
                 this.state = this.selectIndexGetter.get();
             }
@@ -88,17 +88,17 @@ public class ListButton extends CycleButtonWidget {
 
     }
 
-//    @Override
-//    public void onInit() {
-//
-//        super.onInit();
-//        if (this.selectIndexGetter != null && this.selectIndexGetter.get() == this.state) {
-//            setBackground(GTUITextures.BACKGROUND_TEXT_FIELD);
-//        } else {
-//            setBackground();
-//        }
-//
-//    }
+    // @Override
+    // public void onInit() {
+    //
+    // super.onInit();
+    // if (this.selectIndexGetter != null && this.selectIndexGetter.get() == this.state) {
+    // setBackground(GTUITextures.BACKGROUND_TEXT_FIELD);
+    // } else {
+    // setBackground();
+    // }
+    //
+    // }
 
     @Override
     public ClickResult onClick(int buttonId, boolean doubleClick) {
@@ -111,15 +111,16 @@ public class ListButton extends CycleButtonWidget {
         }
         return ClickResult.ACKNOWLEDGED;
     }
+
     @Override
     public void readOnServer(int id, PacketBuffer buf) {
-        switch (id){
-            case 1->{
+        switch (id) {
+            case 1 -> {
                 int confirmedState = buf.readVarIntFromBuffer();
                 this.selectIndexSetter.accept(confirmedState);
                 syncToClient(1, buffer -> buffer.writeVarIntToBuffer(confirmedState));
             }
-            case 2->{
+            case 2 -> {
                 syncToClient(1, buffer -> buffer.writeVarIntToBuffer(this.selectIndexGetter.get()));
 
             }
@@ -129,16 +130,16 @@ public class ListButton extends CycleButtonWidget {
 
     @Override
     public void readOnClient(int id, PacketBuffer buf) {
-        switch (id){
-            case 1->{
+        switch (id) {
+            case 1 -> {
                 int confirmedState = buf.readVarIntFromBuffer();
                 this.selectIndexSetter.accept(confirmedState);
 
             }
-            case 2->{
+            case 2 -> {
                 int confirmedState = buf.readVarIntFromBuffer();
                 this.selectIndexSetter.accept(confirmedState);
-                this.state=confirmedState;
+                this.state = confirmedState;
             }
         }
 
@@ -150,4 +151,3 @@ public class ListButton extends CycleButtonWidget {
     }
 
 }
-

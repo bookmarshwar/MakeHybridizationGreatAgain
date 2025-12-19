@@ -1,7 +1,8 @@
 package com.folk.MakeHybridizationGreatAgain.loader;
 
-import com.folk.MakeHybridizationGreatAgain.items.Cropcore;
 import net.minecraft.item.Item;
+
+import com.folk.MakeHybridizationGreatAgain.items.Cropcore;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;

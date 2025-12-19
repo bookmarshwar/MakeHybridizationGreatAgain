@@ -30,6 +30,7 @@ public class CommonProxy {
 
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {}
+
     public void registerRenderers() {
         // 在服务端，这个方法是空的
     }

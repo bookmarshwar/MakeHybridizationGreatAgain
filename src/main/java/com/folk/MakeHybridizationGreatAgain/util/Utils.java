@@ -30,9 +30,11 @@ public final class Utils {
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
     public static final BigInteger BIG_INTEGER_100 = BigInteger.valueOf(100);
+
     public static boolean generetorTF() {
         return Math.random() < 0.5;
     }
+
     public static List<EntityPlayerMP> GetPlayer() {
         MinecraftServer server = MinecraftServer.getServer();
 
@@ -51,8 +53,6 @@ public final class Utils {
         }
         return playerList;
     }
-
-
 
     public static int getCoilTier(HeatingCoilLevel coilLevel) {
         return coilLevel.getTier() + 1;

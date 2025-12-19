@@ -1,6 +1,8 @@
 package com.folk.MakeHybridizationGreatAgain.machine;
 
-import static com.folk.MakeHybridizationGreatAgain.util.Utils.*;
+import static com.folk.MakeHybridizationGreatAgain.util.Utils.GetPlayer;
+import static com.folk.MakeHybridizationGreatAgain.util.Utils.getOverclockFromStack;
+import static com.folk.MakeHybridizationGreatAgain.util.Utils.setOverclockFromStack;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.*;
@@ -37,7 +39,9 @@ import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
 import com.gtnewhorizons.modularui.api.widget.Widget;
-import com.gtnewhorizons.modularui.common.widget.*;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
+import com.gtnewhorizons.modularui.common.widget.DynamicTextWidget;
+import com.gtnewhorizons.modularui.common.widget.TextWidget;
 import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 
 import gregtech.api.GregTechAPI;
@@ -51,7 +55,8 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.*;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
 import ic2.core.crop.TileEntityCrop;

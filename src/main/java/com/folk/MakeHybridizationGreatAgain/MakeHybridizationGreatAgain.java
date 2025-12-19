@@ -1,13 +1,13 @@
 package com.folk.MakeHybridizationGreatAgain;
 
-import com.folk.MakeHybridizationGreatAgain.materials.WerkstoffLoader;
-import com.folk.MakeHybridizationGreatAgain.loader.RecipeLoader;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.folk.MakeHybridizationGreatAgain.loader.MachineLoader;
+import com.folk.MakeHybridizationGreatAgain.loader.RecipeLoader;
+import com.folk.MakeHybridizationGreatAgain.materials.WerkstoffLoader;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -64,7 +64,7 @@ public class MakeHybridizationGreatAgain {
         proxy.serverStarting(event);
     }
 
-    public void getImage(){
+    public void getImage() {
 
     }
 }
